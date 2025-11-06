@@ -1,0 +1,42 @@
+{
+  "name": "@haiodo/yamrm",
+  "version": "1.0.0",
+  "description": "Yet another multi repository manager",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint src --fix",
+    "do": "pnpm build && node lib/index.js",
+    "dod": "pnpm build && node --enable-source-maps --inspect-brk lib/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Andrey Sobolev haiodo@gmail.com https://github.com/haiodo",
+  "license": "EPL-2.0",
+  "packageManager": "pnpm@10.17.1",
+  "files": [
+    "src",
+    "lib",
+    "types",
+    "package.json",
+    "readme.md"
+  ],
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@types/globby": "^9.1.0",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.10.0",
+    "@types/yargs": "^17.0.34",
+    "eslint": "^9.39.1",
+    "globals": "^16.5.0",
+    "jest": "^30.2.0",
+    "jiti": "^2.6.1",
+    "neostandard": "^0.12.2",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.46.3"
+  },
+  "dependencies": {
+    "globby": "^15.0.0",
+    "yargs": "^18.0.0"
+  }
+}
