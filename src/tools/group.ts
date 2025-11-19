@@ -27,18 +27,41 @@ export function groupByRoot<T extends { file: string } > (
 }
 
 export function groupByFeature<T extends { name: string } > (
-  pkgs: T[]
+  pkgs: T[],
+  categories?: string[]
 ): Map<string, Array<T>> {
   const map: Map<string, Array<T>> = new Map()
 
+  function addTo (root: string, pkg: T): void {
+    if (!map.has(root)) {
+      map.set(root, [])
+    }
+    map.get(root)!.push(pkg)
+  }
+
   // Find a common root's for packages
   for (const pkg of pkgs) {
-    const segments = (pkg.name.split('/')).map(it => it.split('-')).flat()
+    let name = pkg.name
+    const revReplace: Record<string, string> = {}
+    for (const udc of categories ?? []) {
+      const u = '%{' + udc.replaceAll('/', '_').replaceAll('-', '_') + '}'
+      name = name.replaceAll(udc, u)
+      revReplace[u] = udc
+    }
+    const segments = (name.split('/')).map(it => it.split('-')).flat().map(it => {
+      return revReplace[it] ?? it
+    })
+    // Join segments if they match categories
+
     for (const root of segments) {
-      if (!map.has(root)) {
-        map.set(root, [])
-      }
-      map.get(root)!.push(pkg)
+      addTo(root, pkg)
+    }
+  }
+  // Combine all single into a other category.
+  for (const [c, pkgs] of [...map.entries()]) {
+    if (pkgs.length === 1) {
+      addTo('other', pkgs[0])
+      map.delete(c)
     }
   }
 

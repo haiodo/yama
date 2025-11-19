@@ -5,6 +5,7 @@ import { hideBin } from 'yargs/helpers'
 import { listPackages } from './tools/list'
 import { findSourceExports } from './tools/exports'
 import { syncVersions } from './tools/sync'
+import { applyConfig, updateConfig } from './tools/config'
 
 console.log('Hello, Yamrm!')
 
@@ -17,6 +18,26 @@ yargs(hideBin(process.argv))
     async (argv: Arguments) => {
       const root = resolve(argv.root as string)
       await listPackages(root, argv.mode as 'feature' | 'folder')
+    }
+  )
+  .command('config <root> [mode]', 'Scan&Create&Update config',
+    (yargs) => {
+      return yargs.positional('root', { describe: 'a root directory for a project to list all packages.', default: '.' })
+        .positional('mode', { describe: 'A bundles mode, none|include', default: 'none' })
+    },
+    async (argv: Arguments) => {
+      const root = resolve(argv.root as string)
+      await updateConfig(root, argv.mode === 'include')
+    }
+  )
+  .command('apply <root>', 'Apply configuration to managed package.json\'s',
+    (yargs) => {
+      return yargs.positional('root', { describe: 'a root directory for a project to list all packages.', default: '.' })
+        .positional('mode', { describe: 'A bundles mode, none|include', default: 'none' })
+    },
+    async (argv: Arguments) => {
+      const root = resolve(argv.root as string)
+      await applyConfig(root)
     }
   )
   .command('find-source-exports <root>', 'and and list all packages in the root directory recursively',

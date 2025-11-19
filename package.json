@@ -25,6 +25,7 @@
     "@eslint/js": "^9.39.1",
     "@types/globby": "^9.1.0",
     "@types/jest": "^30.0.0",
+    "@types/js-yaml": "^4.0.9",
     "@types/node": "^24.10.0",
     "@types/yargs": "^17.0.34",
     "eslint": "^9.39.1",
@@ -37,6 +38,7 @@
   },
   "dependencies": {
     "globby": "^15.0.0",
+    "js-yaml": "^4.1.1",
     "yargs": "^18.0.0"
   }
 }
