@@ -23,11 +23,10 @@ yargs(hideBin(process.argv))
   .command('config <root> [mode]', 'Scan&Create&Update config',
     (yargs) => {
       return yargs.positional('root', { describe: 'a root directory for a project to list all packages.', default: '.' })
-        .positional('mode', { describe: 'A bundles mode, none|include', default: 'none' })
     },
     async (argv: Arguments) => {
       const root = resolve(argv.root as string)
-      await updateConfig(root, argv.mode === 'include')
+      await updateConfig(root)
     }
   )
   .command('apply <root>', 'Apply configuration to managed package.json\'s',

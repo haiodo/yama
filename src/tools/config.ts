@@ -4,12 +4,9 @@ import { globby } from 'globby'
 import { groupByFeature } from './group'
 import yaml from 'js-yaml'
 import { existsSync } from 'fs'
-import { moveMessagePortToContext } from 'worker_threads'
 
 export interface Configuration {
   categories?: string[] // User defined categories
-  enabled?: string[] // Enabled features
-  ignored?: string[] // Ignored features, other are ignored by default
 
   features?: Record<string, {
     modules: number
@@ -58,14 +55,12 @@ async function listPackage (root: string): Promise<PackageDecl[]> {
 /**
  * List all packages in `root` (recursively), sorted alphabetically by name.
  */
-export async function updateConfig (root: string, includePackages: boolean): Promise<void> {
+export async function updateConfig (root: string): Promise<void> {
   console.info('Listing packages in', root)
 
   const pkgs = await listPackage(root)
   const configFile = path.join(root, 'ymrm.yaml')
   let config: Configuration = {
-    enabled: [],
-    ignored: [], // A list of ignored features
     features: {},
     modules: 0
   }
@@ -88,13 +83,10 @@ export async function updateConfig (root: string, includePackages: boolean): Pro
 
   const features: Record<string, PackageDecl[]> = {}
   for (const [group, pkgs] of groupped) {
-    if (group === 'other' || (config.enabled ?? []).includes(group) || (config.ignored ?? []).includes(group)) {
-      if (config.features[group] !== undefined) {
-        delete config.features[group]
-      }
-      continue
-    }
     if (config.features[group] === undefined) {
+      if (group.startsWith('@')) {
+        continue
+      }
       config.features[group] = {
         enabled: true,
         modules: pkgs.length,
@@ -105,9 +97,6 @@ export async function updateConfig (root: string, includePackages: boolean): Pro
       config.features[group].names = pkgs.map(it => it.name)
     }
     features[group] = pkgs
-    if (!includePackages) {
-      delete config.features[group].names
-    }
   }
 
   config.modules = pkgs.length
@@ -175,8 +164,7 @@ export async function applyConfig (root: string): Promise<void> {
   const toExclude: Record<string, PackageDecl[]> = {}
 
   for (const [group, pkgs] of groupped) {
-    const enabled = (config.features ?? {})[group]?.enabled === true ||
-      group === 'other' || (config.enabled ?? []).includes(group) || (config.ignored ?? []).includes(group)
+    const enabled = (config.features ?? {})[group]?.enabled === true
     if (enabled) {
       toInclude[group] = pkgs
     } else {

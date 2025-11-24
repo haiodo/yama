@@ -35,12 +35,27 @@ export async function syncVersions (root: string): Promise<void> {
     pkg: Record<string, any>
   }[] = []
 
+  const workspacePackages = new Set<string>()
+
   const dependencyVersions = new Map<string, string>()
   for (const file of files) {
     try {
+      console.log('checking', file)
       const absFile = path.join(root, file)
       const content = await fs.readFile(absFile, 'utf8')
       const json = JSON.parse(content)
+
+      workspacePackages.add(json.name)
+
+      // Add package version
+      // Check if have greater version
+      const currentVersion = dependencyVersions.get(json.name)
+      if (currentVersion == null || compareVersions(json.version as string, currentVersion) > 0) {
+        dependencyVersions.set(json.name, '^' + json.version as string)
+        if (currentVersion != null) {
+          console.log('found new version', json.name, json.version, currentVersion)
+        }
+      }
 
       // Iterate over all deps and find the latest version of each dependency
       for (const [name, version] of Object.entries(json.dependencies ?? {})) {
@@ -81,14 +96,24 @@ export async function syncVersions (root: string): Promise<void> {
     for (const [name, version] of Object.entries(dependencies ?? {})) {
       const currentVersion = dependencyVersions.get(name)
       if (currentVersion == null || compareVersions(currentVersion, version as string)) {
-        dependencies[name] = currentVersion
+        dependencies[name] = !currentVersion?.startsWith('workspace:') ? 'workspace:' + currentVersion : currentVersion
+        changes++
+      }
+      // Check if version starts with workspace:
+      if (workspacePackages.has(name) && !dependencies[name].startsWith('workspace:')) {
+        dependencies[name] = 'workspace:' + dependencies[name]
         changes++
       }
     }
     for (const [name, version] of Object.entries(devDependencies ?? {})) {
       const currentVersion = dependencyVersions.get(name)
       if (currentVersion == null || compareVersions(currentVersion, version as string)) {
-        devDependencies[name] = currentVersion
+        devDependencies[name] = !currentVersion?.startsWith('workspace:') ? 'workspace:' + currentVersion : currentVersion
+        changes++
+      }
+      // Check if version starts with workspace:
+      if (workspacePackages.has(name) && !devDependencies[name].startsWith('workspace:')) {
+        devDependencies[name] = 'workspace:' + devDependencies[name]
         changes++
       }
     }
