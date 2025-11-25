@@ -61,7 +61,8 @@ export async function syncVersions (root: string): Promise<void> {
       for (const [name, version] of Object.entries(json.dependencies ?? {})) {
         // Check if have greater version
         const currentVersion = dependencyVersions.get(name)
-        if (currentVersion == null || compareVersions(version as string, currentVersion) > 0) {
+        if (currentVersion == null || compareVersions(version as string, currentVersion) > 0 ||
+          ((version as string).startsWith('^') && !(currentVersion as string).startsWith('^'))) {
           dependencyVersions.set(name, version as string)
           if (currentVersion != null) {
             console.log('found new version', name, version, currentVersion)
@@ -71,7 +72,8 @@ export async function syncVersions (root: string): Promise<void> {
       for (const [name, version] of Object.entries(json.devDependencies ?? {})) {
         // Check if have greater version
         const currentVersion = dependencyVersions.get(name)
-        if (currentVersion == null || compareVersions(version as string, currentVersion) > 0) {
+        if (currentVersion == null || compareVersions(version as string, currentVersion) > 0 ||
+          ((version as string).startsWith('^') && !(currentVersion as string).startsWith('^'))) {
           dependencyVersions.set(name, version as string)
           if (currentVersion != null) {
             console.log('found new version', name, version, currentVersion)
@@ -96,7 +98,7 @@ export async function syncVersions (root: string): Promise<void> {
     for (const [name, version] of Object.entries(dependencies ?? {})) {
       const currentVersion = dependencyVersions.get(name)
       if (currentVersion == null || compareVersions(currentVersion, version as string)) {
-        dependencies[name] = !currentVersion?.startsWith('workspace:') ? 'workspace:' + currentVersion : currentVersion
+        dependencies[name] = currentVersion
         changes++
       }
       // Check if version starts with workspace:
@@ -108,7 +110,7 @@ export async function syncVersions (root: string): Promise<void> {
     for (const [name, version] of Object.entries(devDependencies ?? {})) {
       const currentVersion = dependencyVersions.get(name)
       if (currentVersion == null || compareVersions(currentVersion, version as string)) {
-        devDependencies[name] = !currentVersion?.startsWith('workspace:') ? 'workspace:' + currentVersion : currentVersion
+        devDependencies[name] = currentVersion
         changes++
       }
       // Check if version starts with workspace:
