@@ -8,7 +8,7 @@
     "lint": "eslint src --fix",
     "do": "pnpm build && node lib/index.js",
     "dod": "pnpm build && node --enable-source-maps --inspect-brk lib/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest run"
   },
   "keywords": [],
   "author": "Andrey Sobolev haiodo@gmail.com https://github.com/haiodo",
@@ -33,8 +33,10 @@
     "jest": "^30.2.0",
     "jiti": "^2.6.1",
     "neostandard": "^0.12.2",
+    "ts-jest": "^29.4.6",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.46.3"
+    "typescript-eslint": "^8.46.3",
+    "vitest": "^4.0.18"
   },
   "dependencies": {
     "globby": "^15.0.0",
