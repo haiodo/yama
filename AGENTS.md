@@ -1,8 +1,8 @@
-# @haiodo/yamrm - Yet Another Multi Repository Manager
+# @haiodo/yama - Yet Another Multi-repository Manager
 
 ## Project Overview
 
-Yamrm is a CLI tool for managing multiple repositories in a monorepo setup. It was created to simplify dependency and version management across multiple packages, addressing limitations found in tools like rush.js, turbo, and pnpm.
+Yama is a CLI tool for managing multiple repositories in a monorepo setup. It was created to simplify dependency and version management across multiple packages, addressing limitations found in tools like rush.js, turbo, and pnpm.
 
 **Key Concept**: The tool aims to eventually eliminate manual `package.json` management by auto-generating them in a `.build` folder, keeping source directories free from dependency burden.
 

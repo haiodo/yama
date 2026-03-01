@@ -11,7 +11,7 @@ describe('analyzeExternalDependencies', () => {
   let tempDir: string
 
   beforeEach(async () => {
-    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'yamrm-ext-test-'))
+    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'yama-ext-test-'))
   })
 
   afterEach(async () => {
@@ -227,7 +227,7 @@ describe('analyzeExternalDependencies with exclude', () => {
   let tempDir: string
 
   beforeEach(async () => {
-    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'yamrm-external-exclude-'))
+    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'yama-external-exclude-'))
   })
 
   afterEach(async () => {

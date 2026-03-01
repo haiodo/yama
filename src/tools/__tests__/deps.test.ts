@@ -13,7 +13,7 @@ describe('buildDependencyTree', () => {
   let tempDir: string
 
   beforeEach(async () => {
-    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'yamrm-test-'))
+    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'yama-test-'))
   })
 
   afterEach(async () => {

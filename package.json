@@ -1,7 +1,7 @@
 {
-  "name": "@haiodo/yamrm",
+  "name": "@haiodo/yama",
   "version": "1.0.0",
-  "description": "Yet another multi repository manager",
+  "description": "Yet another multi-repository manager",
   "main": "lib/index.js",
   "scripts": {
     "build": "tsc",

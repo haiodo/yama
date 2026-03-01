@@ -16,7 +16,7 @@ import {
   formatWhereUsedResult
 } from './tools/deps.js'
 
-console.log('Hello, Yamrm!')
+console.log('Hello, Yama!')
 
 yargs(hideBin(process.argv))
   .command('list <root> [mode]', 'and and list all packages in the root directory recursively',

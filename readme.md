@@ -13,5 +13,4 @@ A plan:
 
 ## Tools:
 
-1. Yamrm configuration and managed package.json, with enable/disable functionality.
-
+1. Yama configuration and managed package.json, with enable/disable functionality.

@@ -7,7 +7,7 @@ describe('findWhereUsed', () => {
   let tempDir: string
 
   beforeEach(async () => {
-    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'yamrm-where-used-'))
+    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'yama-where-used-'))
   })
 
   afterEach(async () => {
