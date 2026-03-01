@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Yet another multi-repository manager",
   "main": "lib/index.js",
+  "bin": {
+    "yama": "lib/index.js"
+  },
   "scripts": {
     "build": "tsc",
     "lint": "eslint src --fix",
